@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viminder - Reminder List</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+
+body{
+  background:url('listbg.jpeg') center/cover no-repeat;
+  min-height:100vh;
+}
+
+/* Navbar */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
+  color:white;
+}
+
+.logo{font-size:1.5rem;font-weight:bold}
+
+/* Board container */
+.board{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  padding:40px;
+  justify-content:center;
+}
+
+/* Paper note */
+.note{
+  width:200px;
+  min-height:150px;
+  background:#fff8dc;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 8px 15px rgba(0,0,0,0.3);
+  transform: rotate(var(--rotate));
+}
+
+.note h3{
+  margin-bottom:10px;
+}
+
+.note p{
+  font-size:0.9rem;
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo" onclick="goHome()" style="cursor:pointer;">Viminder</div>
+  <div>
+    <button onclick="goBack()" style="padding:8px 15px;border:none;border-radius:8px;cursor:pointer;">Back</button>
+  </div>
+</div>
+</div>
+
+<div class="board">
+  <!-- Example notes (prototype) -->
+  <div class="note">
+    <h3>Study Math</h3>
+    <p>2026-05-01 10:00</p>
+  </div>
+
+  <div class="note">
+    <h3>Meeting</h3>
+    <p>2026-05-02 14:00</p>
+  </div>
+
+  <div class="note">
+    <h3>Workout</h3>
+    <p>2026-05-03 07:00</p>
+  </div>
+</div>
+
+<audio id="bg-music" loop></audio>
+
+<button onclick="toggleMusic()" id="music-btn" 
+style="position:fixed;bottom:20px;right:20px;padding:10px;border:none;border-radius:50%;cursor:pointer;">
+🔊
+</button>
+<script>
+function goBack(){
+  window.location.href = "main.html"; // change if your main page has different name
+}
+// Random tilt for each note
+document.querySelectorAll('.note').forEach(note => {
+  const randomDeg = (Math.random() * 10 - 5) + 'deg';
+  note.style.setProperty('--rotate', randomDeg);
+});
+
+// Music list
+const songs = [
+  "1.mp3",
+  "2.mp3",
+  "3.mp3",
+  "4.mp3",
+  "5.mp3"
+];
+
+const audio = document.getElementById("bg-music");
+
+// Pick random song on load
+const randomSong = songs[Math.floor(Math.random() * songs.length)];
+audio.src = randomSong;
+
+// Try autoplay (may require user interaction depending on browser)
+audio.volume = 0.5;
+audio.play().catch(() => {
+  console.log("Autoplay blocked until user interacts");
+});
+
+// Toggle mute
+function toggleMusic(){
+  audio.muted = !audio.muted;
+
+  document.getElementById("music-btn").innerText = 
+    audio.muted ? "🔇" : "🔊";
+}
+document.body.addEventListener("click", () => {
+  if(audio.paused){
+    audio.play();
+  }
+}, { once: true });
+function goHome(){
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

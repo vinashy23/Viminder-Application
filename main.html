@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viminder - Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{transition:0.4s;}
+
+/* Navbar */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:rgba(0,0,0,0.2);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.logo{font-size:1.5rem;font-weight:bold}
+.theme-buttons{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  display:flex;
+  flex-direction:column;
+}
+
+.theme-buttons button{
+  margin:4px 0;
+  padding:6px 10px;
+  border:none;
+  cursor:pointer;
+  border-radius:8px;
+  color:white;
+}
+
+/* Individual button colors */
+.theme-buttons button:nth-child(1){background:#FFD700;color:#1a1a1a}
+.theme-buttons button:nth-child(2){background:#90caf9;color:#0d47a1}
+.theme-buttons button:nth-child(3){background:#f4a7b9;color:#6a1b2d}
+.theme-buttons button:nth-child(4){background:#d1b3ff;color:#4a148c}
+.theme-buttons button:nth-child(5){background:#a3b18a;color:#1b4332}
+.theme-buttons button:nth-child(6){background:linear-gradient(135deg,#ff00cc,#3333ff,#00ffee);color:white}
+
+.container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:80vh;
+}
+
+/* Paper style form */
+.form-card{
+  background:#fff8dc;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
+  transform: rotate(var(--rotate));
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+input, button{
+  padding:10px;
+  margin:8px;
+  border-radius:8px;
+  border:none;
+}
+
+button{cursor:pointer}
+
+/* Themes */
+.gold{background:#1a1a1a;color:#FFD700}
+.baby{background:#e3f2fd;color:#1565c0}
+.pink{background:#f8e1e7;color:#ad1457}
+.lylac{background:#f3e8ff;color:#6a1b9a}
+.sage{background:#e8f0e8;color:#3a5a40}
+.holo{background:linear-gradient(135deg,#ff00cc,#3333ff,#00ffee);color:white}
+
+</style>
+</head>
+<body class="gold">
+
+<div class="navbar">
+  <div class="logo" onclick="goHome()" style="cursor:pointer;">Viminder</div>
+  <div>
+    <button onclick="viewReminders()" style="padding:8px 15px;border:none;border-radius:8px;cursor:pointer;">View Reminders</button>
+  </div>
+</div>
+  <div class="theme-buttons">
+    <button onclick="setTheme('gold')">Gold</button>
+    <button onclick="setTheme('baby')">Baby Blue</button>
+    <button onclick="setTheme('pink')">Dusty Pink</button>
+    <button onclick="setTheme('lylac')">Lylac</button>
+    <button onclick="setTheme('sage')">Sage</button>
+    <button onclick="setTheme('holo')">Hologram</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="form-card">
+    <h1>Create Reminder</h1>
+    <input type="text" id="title" placeholder="Reminder title">
+    <input type="date" id="date">
+    <input type="time" id="time">
+    <button onclick="addReminder()">Add Reminder</button>
+  </div>
+</div>
+<audio id="bg-music" loop></audio>
+
+<button onclick="toggleMusic()" id="music-btn" 
+style="position:fixed;bottom:20px;right:20px;padding:10px;border:none;border-radius:50%;cursor:pointer;">
+🔊
+</button>
+<script>
+function setTheme(theme){
+  document.body.className = theme;
+}
+
+function addReminder(){
+  // Prototype only (no functionality)
+}
+
+function viewReminders(){
+  window.location.href = "reminderlist.html";
+}
+const paper = document.querySelector('.form-card');
+if(paper){
+  const randomDeg = (Math.random() * 6 - 3) + 'deg';
+  paper.style.transform = `rotate(${randomDeg})`;
+}
+
+// Music list
+const songs = [
+  "1.mp3",
+  "2.mp3",
+  "3.mp3",
+  "4.mp3",
+  "5.mp3"
+];
+
+const audio = document.getElementById("bg-music");
+
+// Pick random song on load
+const randomSong = songs[Math.floor(Math.random() * songs.length)];
+audio.src = randomSong;
+
+// Try autoplay (may require user interaction depending on browser)
+audio.volume = 0.5;
+audio.play().catch(() => {
+  console.log("Autoplay blocked until user interacts");
+});
+
+// Toggle mute
+function toggleMusic(){
+  audio.muted = !audio.muted;
+
+  document.getElementById("music-btn").innerText = 
+    audio.muted ? "🔇" : "🔊";
+}
+document.body.addEventListener("click", () => {
+  if(audio.paused){
+    audio.play();
+  }
+}, { once: true });
+
+function goHome(){
+  window.location.href = "index.html";
+}
+</script>   
+
+</body>
+</html>
